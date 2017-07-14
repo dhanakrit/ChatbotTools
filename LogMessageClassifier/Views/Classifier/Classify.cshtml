@@ -6,8 +6,7 @@
 @using LogMessageClassifier.Models.ViewModels;
 @model ClassifyViewModel
 
-<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <link href="~/Content/themes/base/all.css" rel="stylesheet" />
 <link href="~/Content/themes/base/accordion.css" rel="stylesheet" />
 
@@ -29,37 +28,45 @@
         }
         else
         {
-            <div>
-                <text class="h3"> Message: @(Model.Message)</text>
+            <div>                
                 <div class="demo">
                     <div id="accordion">
-                        <h3>Select a category</h3>
+                        <h3>Main Message</h3>
                         <div>
+                            <text class="h3">[@Model.MessageId] @(Model.Message)</text><br /><br />
                             <table>
                                 @foreach (var cat in Model.Categories)
                                 {
-                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageID, CategoryID = cat.ID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
+                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
                                 }
                             </table>
                         </div>
-                        <h3>Related Message</h3>
-                        <div>
-                            <p>Message: </p>
-                            <table>
-                                @foreach (var cat in Model.Categories)
-                                {
-                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageID, CategoryID = cat.ID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
-                                }
-                            </table>
-                        </div>
+                        @if (Model.RelatedMessages.Count > 0)
+                        {
+                            <h3>@Model.RelatedMessages[0].SessionFileName [@Model.RelatedMessages.Count]</h3>
+                            <div>
+                                <p>
+                                    @foreach(var item in Model.RelatedMessages)
+                                    {
+                                        //@item.ChatTimestamp.Value.ToString("dd MMM yyyy hh:mm:ss")  @item.Message.Trim()
+                                    }
+                                </p>
+                                <table>
+                                    @foreach (var cat in Model.Categories)
+                                    {
+                                        @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
+                                    }
+                                </table>
+                            </div>
+                        }
                     </div>
                 </div>                
             </div>
             <br />
             <div>
-                @Html.ActionLink("Discard", "Discard", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-danger btn-lg" })
-                @Html.ActionLink("Skip", "Skip", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
-                @Html.ActionLink("Next", "Next", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-info btn-lg" })
+                @Html.ActionLink("Discard", "Discard", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-danger btn-lg" })
+                @Html.ActionLink("Skip", "Skip", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
+                @Html.ActionLink("Next", "Next", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-info btn-lg" })
             </div>
         }
     </div>

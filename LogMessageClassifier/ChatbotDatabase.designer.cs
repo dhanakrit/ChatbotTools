@@ -33,12 +33,12 @@ namespace LogMessageClassifier
     partial void InsertCategory(Category instance);
     partial void UpdateCategory(Category instance);
     partial void DeleteCategory(Category instance);
-    partial void InsertClassifiedMessage(ClassifiedMessage instance);
-    partial void UpdateClassifiedMessage(ClassifiedMessage instance);
-    partial void DeleteClassifiedMessage(ClassifiedMessage instance);
     partial void InsertLogMessage(LogMessage instance);
     partial void UpdateLogMessage(LogMessage instance);
     partial void DeleteLogMessage(LogMessage instance);
+    partial void InsertClassifiedMessage(ClassifiedMessage instance);
+    partial void UpdateClassifiedMessage(ClassifiedMessage instance);
+    partial void DeleteClassifiedMessage(ClassifiedMessage instance);
     #endregion
 		
 		public ChatbotDatabaseDataContext() : 
@@ -79,19 +79,19 @@ namespace LogMessageClassifier
 			}
 		}
 		
-		public System.Data.Linq.Table<ClassifiedMessage> ClassifiedMessages
-		{
-			get
-			{
-				return this.GetTable<ClassifiedMessage>();
-			}
-		}
-		
 		public System.Data.Linq.Table<LogMessage> LogMessages
 		{
 			get
 			{
 				return this.GetTable<LogMessage>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ClassifiedMessage> ClassifiedMessages
+		{
+			get
+			{
+				return this.GetTable<ClassifiedMessage>();
 			}
 		}
 	}
@@ -102,20 +102,18 @@ namespace LogMessageClassifier
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _ID;
+		private int _Id;
 		
 		private string _CategoryName;
 		
 		private System.Nullable<System.DateTime> _ModifiedDate;
 		
-		private EntitySet<ClassifiedMessage> _ClassifiedMessages;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
     partial void OnCategoryNameChanging(string value);
     partial void OnCategoryNameChanged();
     partial void OnModifiedDateChanging(System.Nullable<System.DateTime> value);
@@ -124,26 +122,25 @@ namespace LogMessageClassifier
 		
 		public Category()
 		{
-			this._ClassifiedMessages = new EntitySet<ClassifiedMessage>(new Action<ClassifiedMessage>(this.attach_ClassifiedMessages), new Action<ClassifiedMessage>(this.detach_ClassifiedMessages));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
-				return this._ID;
+				return this._Id;
 			}
 			set
 			{
-				if ((this._ID != value))
+				if ((this._Id != value))
 				{
-					this.OnIDChanging(value);
+					this.OnIdChanging(value);
 					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
 				}
 			}
 		}
@@ -188,223 +185,6 @@ namespace LogMessageClassifier
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_ClassifiedMessage", Storage="_ClassifiedMessages", ThisKey="ID", OtherKey="CategoryID")]
-		public EntitySet<ClassifiedMessage> ClassifiedMessages
-		{
-			get
-			{
-				return this._ClassifiedMessages;
-			}
-			set
-			{
-				this._ClassifiedMessages.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ClassifiedMessages(ClassifiedMessage entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = this;
-		}
-		
-		private void detach_ClassifiedMessages(ClassifiedMessage entity)
-		{
-			this.SendPropertyChanging();
-			entity.Category = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClassifiedMessages")]
-	public partial class ClassifiedMessage : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _MessageID;
-		
-		private System.Nullable<int> _CategoryID;
-		
-		private System.Nullable<System.DateTime> _DateModified;
-		
-		private EntityRef<Category> _Category;
-		
-		private EntityRef<LogMessage> _LogMessage;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnMessageIDChanging(int value);
-    partial void OnMessageIDChanged();
-    partial void OnCategoryIDChanging(System.Nullable<int> value);
-    partial void OnCategoryIDChanged();
-    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
-    partial void OnDateModifiedChanged();
-    #endregion
-		
-		public ClassifiedMessage()
-		{
-			this._Category = default(EntityRef<Category>);
-			this._LogMessage = default(EntityRef<LogMessage>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MessageID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int MessageID
-		{
-			get
-			{
-				return this._MessageID;
-			}
-			set
-			{
-				if ((this._MessageID != value))
-				{
-					if (this._LogMessage.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnMessageIDChanging(value);
-					this.SendPropertyChanging();
-					this._MessageID = value;
-					this.SendPropertyChanged("MessageID");
-					this.OnMessageIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryID", DbType="Int")]
-		public System.Nullable<int> CategoryID
-		{
-			get
-			{
-				return this._CategoryID;
-			}
-			set
-			{
-				if ((this._CategoryID != value))
-				{
-					if (this._Category.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCategoryIDChanging(value);
-					this.SendPropertyChanging();
-					this._CategoryID = value;
-					this.SendPropertyChanged("CategoryID");
-					this.OnCategoryIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DateModified
-		{
-			get
-			{
-				return this._DateModified;
-			}
-			set
-			{
-				if ((this._DateModified != value))
-				{
-					this.OnDateModifiedChanging(value);
-					this.SendPropertyChanging();
-					this._DateModified = value;
-					this.SendPropertyChanged("DateModified");
-					this.OnDateModifiedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Category_ClassifiedMessage", Storage="_Category", ThisKey="CategoryID", OtherKey="ID", IsForeignKey=true)]
-		public Category Category
-		{
-			get
-			{
-				return this._Category.Entity;
-			}
-			set
-			{
-				Category previousValue = this._Category.Entity;
-				if (((previousValue != value) 
-							|| (this._Category.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Category.Entity = null;
-						previousValue.ClassifiedMessages.Remove(this);
-					}
-					this._Category.Entity = value;
-					if ((value != null))
-					{
-						value.ClassifiedMessages.Add(this);
-						this._CategoryID = value.ID;
-					}
-					else
-					{
-						this._CategoryID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("Category");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LogMessage_ClassifiedMessage", Storage="_LogMessage", ThisKey="MessageID", OtherKey="ID", IsForeignKey=true)]
-		public LogMessage LogMessage
-		{
-			get
-			{
-				return this._LogMessage.Entity;
-			}
-			set
-			{
-				LogMessage previousValue = this._LogMessage.Entity;
-				if (((previousValue != value) 
-							|| (this._LogMessage.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._LogMessage.Entity = null;
-						previousValue.ClassifiedMessage = null;
-					}
-					this._LogMessage.Entity = value;
-					if ((value != null))
-					{
-						value.ClassifiedMessage = this;
-						this._MessageID = value.ID;
-					}
-					else
-					{
-						this._MessageID = default(int);
-					}
-					this.SendPropertyChanged("LogMessage");
-				}
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -432,57 +212,110 @@ namespace LogMessageClassifier
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _ID;
+		private int _Id;
+		
+		private string _Chatter;
+		
+		private System.Nullable<System.DateTime> _ChatTimestamp;
 		
 		private string _Message;
 		
 		private System.Nullable<short> _Status;
 		
+		private string _SessionFileName;
+		
 		private System.Nullable<System.DateTime> _DateModified;
 		
-		private EntityRef<ClassifiedMessage> _ClassifiedMessage;
+		private System.Nullable<System.DateTime> _CreatedDate;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnChatterChanging(string value);
+    partial void OnChatterChanged();
+    partial void OnChatTimestampChanging(System.Nullable<System.DateTime> value);
+    partial void OnChatTimestampChanged();
     partial void OnMessageChanging(string value);
     partial void OnMessageChanged();
     partial void OnStatusChanging(System.Nullable<short> value);
     partial void OnStatusChanged();
+    partial void OnSessionFileNameChanging(string value);
+    partial void OnSessionFileNameChanged();
     partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
     partial void OnDateModifiedChanged();
+    partial void OnCreatedDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnCreatedDateChanged();
     #endregion
 		
 		public LogMessage()
 		{
-			this._ClassifiedMessage = default(EntityRef<ClassifiedMessage>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
 		{
 			get
 			{
-				return this._ID;
+				return this._Id;
 			}
 			set
 			{
-				if ((this._ID != value))
+				if ((this._Id != value))
 				{
-					this.OnIDChanging(value);
+					this.OnIdChanging(value);
 					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="NText", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Chatter", DbType="NVarChar(200)")]
+		public string Chatter
+		{
+			get
+			{
+				return this._Chatter;
+			}
+			set
+			{
+				if ((this._Chatter != value))
+				{
+					this.OnChatterChanging(value);
+					this.SendPropertyChanging();
+					this._Chatter = value;
+					this.SendPropertyChanged("Chatter");
+					this.OnChatterChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChatTimestamp", DbType="DateTime")]
+		public System.Nullable<System.DateTime> ChatTimestamp
+		{
+			get
+			{
+				return this._ChatTimestamp;
+			}
+			set
+			{
+				if ((this._ChatTimestamp != value))
+				{
+					this.OnChatTimestampChanging(value);
+					this.SendPropertyChanging();
+					this._ChatTimestamp = value;
+					this.SendPropertyChanged("ChatTimestamp");
+					this.OnChatTimestampChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="NVarChar(MAX)")]
 		public string Message
 		{
 			get
@@ -522,6 +355,26 @@ namespace LogMessageClassifier
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SessionFileName", DbType="NVarChar(20)")]
+		public string SessionFileName
+		{
+			get
+			{
+				return this._SessionFileName;
+			}
+			set
+			{
+				if ((this._SessionFileName != value))
+				{
+					this.OnSessionFileNameChanging(value);
+					this.SendPropertyChanging();
+					this._SessionFileName = value;
+					this.SendPropertyChanged("SessionFileName");
+					this.OnSessionFileNameChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
 		public System.Nullable<System.DateTime> DateModified
 		{
@@ -542,31 +395,156 @@ namespace LogMessageClassifier
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="LogMessage_ClassifiedMessage", Storage="_ClassifiedMessage", ThisKey="ID", OtherKey="MessageID", IsUnique=true, IsForeignKey=false)]
-		public ClassifiedMessage ClassifiedMessage
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> CreatedDate
 		{
 			get
 			{
-				return this._ClassifiedMessage.Entity;
+				return this._CreatedDate;
 			}
 			set
 			{
-				ClassifiedMessage previousValue = this._ClassifiedMessage.Entity;
-				if (((previousValue != value) 
-							|| (this._ClassifiedMessage.HasLoadedOrAssignedValue == false)))
+				if ((this._CreatedDate != value))
 				{
+					this.OnCreatedDateChanging(value);
 					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._ClassifiedMessage.Entity = null;
-						previousValue.LogMessage = null;
-					}
-					this._ClassifiedMessage.Entity = value;
-					if ((value != null))
-					{
-						value.LogMessage = this;
-					}
-					this.SendPropertyChanged("ClassifiedMessage");
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClassifiedMessages")]
+	public partial class ClassifiedMessage : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _MessageId;
+		
+		private System.Nullable<int> _CategoryId;
+		
+		private System.Nullable<int> _SecondCategoryId;
+		
+		private System.Nullable<System.DateTime> _DateModified;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMessageIdChanging(int value);
+    partial void OnMessageIdChanged();
+    partial void OnCategoryIdChanging(System.Nullable<int> value);
+    partial void OnCategoryIdChanged();
+    partial void OnSecondCategoryIdChanging(System.Nullable<int> value);
+    partial void OnSecondCategoryIdChanged();
+    partial void OnDateModifiedChanging(System.Nullable<System.DateTime> value);
+    partial void OnDateModifiedChanged();
+    #endregion
+		
+		public ClassifiedMessage()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MessageId", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int MessageId
+		{
+			get
+			{
+				return this._MessageId;
+			}
+			set
+			{
+				if ((this._MessageId != value))
+				{
+					this.OnMessageIdChanging(value);
+					this.SendPropertyChanging();
+					this._MessageId = value;
+					this.SendPropertyChanged("MessageId");
+					this.OnMessageIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CategoryId", DbType="Int")]
+		public System.Nullable<int> CategoryId
+		{
+			get
+			{
+				return this._CategoryId;
+			}
+			set
+			{
+				if ((this._CategoryId != value))
+				{
+					this.OnCategoryIdChanging(value);
+					this.SendPropertyChanging();
+					this._CategoryId = value;
+					this.SendPropertyChanged("CategoryId");
+					this.OnCategoryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SecondCategoryId", DbType="Int")]
+		public System.Nullable<int> SecondCategoryId
+		{
+			get
+			{
+				return this._SecondCategoryId;
+			}
+			set
+			{
+				if ((this._SecondCategoryId != value))
+				{
+					this.OnSecondCategoryIdChanging(value);
+					this.SendPropertyChanging();
+					this._SecondCategoryId = value;
+					this.SendPropertyChanged("SecondCategoryId");
+					this.OnSecondCategoryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DateModified", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DateModified
+		{
+			get
+			{
+				return this._DateModified;
+			}
+			set
+			{
+				if ((this._DateModified != value))
+				{
+					this.OnDateModifiedChanging(value);
+					this.SendPropertyChanging();
+					this._DateModified = value;
+					this.SendPropertyChanged("DateModified");
+					this.OnDateModifiedChanged();
 				}
 			}
 		}

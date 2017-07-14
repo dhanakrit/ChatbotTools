@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace LogMessageClassifier.Controllers
 {
@@ -22,15 +23,68 @@ namespace LogMessageClassifier.Controllers
                     new SelectListItem{Text="View Skipped items", Value = "2"}
                 };
 
-                ViewBag.Modes = modes;
-                ViewBag.CountNew = db.LogMessages.Count(m => m.Status == (short)MessageStatus.New).ToString("N0");
-                ViewBag.CountSkipped = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Skipped).ToString("N0");
-                ViewBag.CountDone = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Done).ToString("N0");
-                ViewBag.CountDiscarded = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Discarded).ToString("N0");
+                //var doneMessages = db.ClassifiedMessages
 
-                return View();
+                //PagedList<ClassifiedMessage> model = new PagedList<ClassifiedMessage>
+
+                return View(this.GetClassifiedMessages(1, 10));
             }
-        }        
+        }
+
+        [HttpPost]
+        public ActionResult Index(int currentPage, int pageSize)
+        {
+            return View(this.GetClassifiedMessages(currentPage, pageSize));
+        }
+
+        private ClassifyIndexViewModel GetClassifiedMessages(int currentPage, int pageSize)
+        {
+            using (var db = new ChatbotDatabaseDataContext())
+            {
+                var items = (from cm in db.ClassifiedMessages
+                             join l in db.LogMessages on cm.MessageId equals l.Id
+                             join c in db.Categories on cm.CategoryId equals c.Id
+                             select new DetailedClassifiedMessage()
+                             {
+                                 MessageId = l.Id,
+                                 Message = l.Message,
+                                 CategoryId = c.Id,
+                                 CategoryName = c.CategoryName
+                             })
+                             .OrderByDescending(m => m.MessageId)
+                             .Skip((currentPage - 1) * pageSize)
+                             .Take(pageSize).ToList();
+                var maxCount = (double)((decimal)db.ClassifiedMessages.Count() / Convert.ToDecimal(pageSize));
+
+                var modes = new List<SelectListItem>()
+                {
+                    new SelectListItem{Text="All new items", Value = "0"},
+                    new SelectListItem{Text="View Skipped items", Value = "2"}
+                };
+
+                
+                var CountNew = db.LogMessages.Count(m => m.Status == (short)MessageStatus.New);
+                var CountSkipped = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Skipped);
+                var CountDone = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Done);
+                var CountDiscarded = db.LogMessages.Count(m => m.Status == (short)MessageStatus.Discarded);
+
+                var model = new ClassifyIndexViewModel()
+                {
+                    CurrentPage = currentPage,
+                    Messages = items,
+                    TotalRecords = items.Count,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(maxCount),
+                    Modes = modes,
+                    CountDiscarded = CountDiscarded,
+                    CountDone = CountDone,
+                    CountNew = CountNew,
+                    CountSkipped = CountSkipped
+                };
+
+                return model;
+            }
+        }
         
         public ActionResult Classify(string MessageID, string CategoryID, string Mode)
         {
@@ -41,24 +95,24 @@ namespace LogMessageClassifier.Controllers
             using (var db = new ChatbotDatabaseDataContext())
             {
                 // Save or update to the classified
-                var mitem = db.LogMessages.SingleOrDefault(l => l.ID == mid);
-                var citem = db.Categories.SingleOrDefault(c => c.ID == cid);
+                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
+                var citem = db.Categories.SingleOrDefault(c => c.Id == cid);
 
                 if (mitem != null && citem != null)
                 {
                     // Check if the item exists
-                    var cl = db.ClassifiedMessages.SingleOrDefault(c => c.MessageID == mid);
+                    var cl = db.ClassifiedMessages.SingleOrDefault(c => c.MessageId == mid);
 
                     if (cl != null)
                     {
                         // Already exists -- set to the new category                        
-                        cl.CategoryID = cid;
+                        cl.CategoryId = cid;
                         cl.DateModified = DateTime.Now;
                     }
                     else
                     {
                         // Add a new one
-                        db.ClassifiedMessages.InsertOnSubmit(new ClassifiedMessage { CategoryID = citem.ID, MessageID = mitem.ID, DateModified = DateTime.Now });
+                        db.ClassifiedMessages.InsertOnSubmit(new ClassifiedMessage { CategoryId = citem.Id, MessageId = mitem.Id, DateModified = DateTime.Now });
                     }
 
                     //Update the message status
@@ -106,7 +160,7 @@ namespace LogMessageClassifier.Controllers
 
             using (var db = new ChatbotDatabaseDataContext())
             {
-                var mitem = db.LogMessages.SingleOrDefault(l => l.ID == mid);
+                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
 
                 if (mitem != null)
                 {
@@ -127,7 +181,7 @@ namespace LogMessageClassifier.Controllers
 
             using (var db = new ChatbotDatabaseDataContext())
             {
-                var mitem = db.LogMessages.SingleOrDefault(l => l.ID == mid);
+                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
 
                 if (mitem != null)
                 {
@@ -148,7 +202,7 @@ namespace LogMessageClassifier.Controllers
 
             using (var db = new ChatbotDatabaseDataContext())
             {
-                var mitem = db.LogMessages.SingleOrDefault(l => l.ID == mid);
+                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
 
                 //if (mitem != null)
                 //{
@@ -206,15 +260,15 @@ namespace LogMessageClassifier.Controllers
             }
         }
 
-        private ClassifyViewModel GetNextItem(ClassificationMode mode, ChatbotDatabaseDataContext context, int currentId)
+        private ClassifyViewModel GetNextItem(ClassificationMode mode, ChatbotDatabaseDataContext db, int currentId)
         {
-            var firstitem = context.LogMessages.OrderBy(m => m.ID).FirstOrDefault(m => m.Status == (short)mode);
+            var firstitem = db.LogMessages.OrderBy(m => m.Id).FirstOrDefault(m => m.Status == (short)mode);
 
             try
             {
                 if(firstitem != null)
                 {
-                    var newitem = context.LogMessages.OrderBy(m => m.ID).FirstOrDefault(m => m.Status == (short)mode && m.ID > currentId);
+                    var newitem = db.LogMessages.OrderBy(m => m.Id).FirstOrDefault(m => m.Status == (short)mode && m.Id > currentId);
 
                     if(newitem != null)
                     {
@@ -224,10 +278,13 @@ namespace LogMessageClassifier.Controllers
 
                 if(firstitem == null)
                 {
-                    firstitem = new LogMessage() { ID = 0, Message = string.Empty };
+                    firstitem = new LogMessage() { Id = 0, Message = string.Empty };
                 }
 
-                return new ClassifyViewModel() { MessageID = firstitem.ID, Mode = mode, Message = firstitem.Message, Categories = context.Categories.ToList() };
+                // Get related messages
+                var related = db.LogMessages.Where(m => m.SessionFileName == firstitem.SessionFileName).OrderBy(m => m.Id).ToList();
+
+                return new ClassifyViewModel() { MessageId = firstitem.Id, Mode = mode, Message = firstitem.Message, Categories = db.Categories.ToList(), RelatedMessages = related };
             }
             finally
             {

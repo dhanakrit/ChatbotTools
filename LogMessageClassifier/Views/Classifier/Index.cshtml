@@ -1,18 +1,75 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Classifer";
-    List<SelectListItem> modes = ViewBag.Modes;
 }
+
+@model LogMessageClassifier.Models.ViewModels.ClassifyIndexViewModel
 
 <div class="page-header">
     <h1>Classification</h1>
 </div>
-<div class="h3"><strong>Done: </strong> @ViewBag.CountDone | <strong>Discarded: </strong> @ViewBag.CountDiscarded</div>
-<br />
 <div class="h4">Select a mode:</div>
 <div class="row">
     <div class="col-md-1">
-        @Html.ActionLink(modes[0].Text + " [" + (string)ViewBag.CountNew + "]", "Classify", "Classifier", new { mode = modes[0].Value }, new { @class= "media-heading btn btn-default btn-info btn-lg" })
-        @Html.ActionLink(modes[1].Text + " [" + (string)ViewBag.CountSkipped + "]", "Classify", "Classifier", new { mode = modes[1].Value }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
+        @Html.ActionLink(Model.Modes[0].Text + " [" + Model.CountNew.ToString("N0") + "]", "Classify", "Classifier", new { mode = Model.Modes[0].Value }, new { @class= "media-heading btn btn-default btn-info btn-lg" })
+        @Html.ActionLink(Model.Modes[1].Text + " [" + Model.CountSkipped.ToString("N0") + "]", "Classify", "Classifier", new { mode = Model.Modes[1].Value }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
     </div>    
+</div>
+<br />
+<div class="h3">
+    <strong>Done: </strong> @Model.CountDone.ToString("N0") | <strong>Discarded: </strong> @Model.CountDiscarded.ToString("N0")
+</div>
+<div>
+    @using (Html.BeginForm("Index", "Classifier", FormMethod.Post))
+    {
+        <table class="table-striped">
+            <tr>
+                <th class="text-info modal-header">Message</th>
+                <th class="text-info modal-header">Category</th>
+                <th class="modal-header"></th>
+            </tr>
+
+            @foreach (var item in Model.Messages)
+            {
+                <tr>
+                    <td class="modal-body media-middle">
+                        @Html.Label(item.Message)
+                    </td>
+                    <td class="modal-body">
+                        @Html.Label(item.CategoryName)
+                    </td>
+                    <td class="modal-body">
+                        @Html.ActionLink("Change", "Classify", new { id = item.MessageId }, new { @class = "media-heading btn btn-default" })
+                    </td>
+                </tr>
+            }
+        </table>
+        <br />
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <td>
+                        @if (i != Model.CurrentPage)
+                        {
+                            <a href="javascript:PagerClick(@i);">@i</a>
+                        }
+                        else
+                        {
+                            <span>@i</span>
+                        }
+                    </td>
+                }
+            </tr>
+        </table>
+        <input type="hidden" id="hfCurrentPageIndex" name="currentPage" />
+        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+    }
+    <script type="text/javascript">
+        function PagerClick(index) {
+            document.getElementById("hfCurrentPageIndex").value = index;
+            document.forms[0].submit();
+        }
+    </script>
+
 </div>

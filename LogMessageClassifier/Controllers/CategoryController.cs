@@ -100,7 +100,7 @@ namespace LogMessageClassifier.Controllers
             using (var db = new ChatbotDatabaseDataContext())
             {
                 // Find the specific item by ID
-                var item = db.Categories.SingleOrDefault(c => c.ID == id);
+                var item = db.Categories.SingleOrDefault(c => c.Id == id);
 
                 if (item != null)
                 {

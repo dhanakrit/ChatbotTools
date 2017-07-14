@@ -2,28 +2,29 @@
   <Connection Mode="WebSettings" ConnectionString="Data Source=203.154.175.127;Initial Catalog=test_chatbot;Persist Security Info=True;User ID=TPXsa" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="test_chatbotConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Categories" Member="Categories">
     <Type Name="Category">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="CategoryName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Category_ClassifiedMessage" Member="ClassifiedMessages" ThisKey="ID" OtherKey="CategoryID" Type="ClassifiedMessage" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ClassifiedMessages" Member="ClassifiedMessages">
-    <Type Name="ClassifiedMessage">
-      <Column Name="MessageID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="CategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="Category_ClassifiedMessage" Member="Category" ThisKey="CategoryID" OtherKey="ID" Type="Category" IsForeignKey="true" />
-      <Association Name="LogMessage_ClassifiedMessage" Member="LogMessage" ThisKey="MessageID" OtherKey="ID" Type="LogMessage" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.LogMessages" Member="LogMessages">
     <Type Name="LogMessage">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Message" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Chatter" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Status" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="SessionFileName" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Association Name="LogMessage_ClassifiedMessage" Member="ClassifiedMessage" ThisKey="ID" OtherKey="MessageID" Type="ClassifiedMessage" Cardinality="One" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClassifiedMessages" Member="ClassifiedMessages">
+    <Type Name="ClassifiedMessage">
+      <Column Name="MessageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SecondCategoryId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
 </Database>
