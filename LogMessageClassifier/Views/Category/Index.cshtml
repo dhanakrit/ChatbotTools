@@ -1,0 +1,45 @@
+﻿@{    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Categories";
+}
+
+@model List<Category>
+
+<div class="page-header">
+    <h1>Categories</h1>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        @using (Html.BeginForm("Create", "Category", FormMethod.Post))
+        {
+            <div class="col-md-offset-2">
+                @Html.TextBox("categoryname", null, new { @class = "form-control", @style="width=50% !important;" })
+            </div>
+            <div class="col-md-offset-1">
+                <input type="submit" class="btn btn-default btn-xs" value="Create" />
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <table class="table-striped">
+        <tr>
+            <th class="text-info modal-header">Category</th>
+            <th class="modal-header"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="modal-body">
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td class="modal-body">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "media-heading btn btn-default" }) 
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "media-heading btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div> 

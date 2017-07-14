@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Classify";
+}
+
+@using LogMessageClassifier.Models.ViewModels;
+@model ClassifyViewModel
+
+<div class="page-header">
+    <h1>Classification</h1>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        @if (Model.Message == string.Empty)
+        {
+            <div>No items</div>
+            @Html.ActionLink(HttpUtility.HtmlDecode("&laquo;") + " Back", "Index", "Classifier", null, new { @class = "btn btn-default btn-warning" })
+        }
+        else
+        {
+            <p> 
+                <text class="h3"> Message: @(Model.Message)</text>
+                <div class="demo">
+                    <div id="accordion">
+                        <h3>Message [2]</h3>
+                        <p>This is just about right</p>
+                    </div>
+                </div>
+                <table>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageID, CategoryID = cat.ID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style= "margin-right: 5px;" })
+                    }
+                </table>
+            </p>
+            <p>
+                @Html.ActionLink("Discard", "Discard", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-danger btn-lg" })
+                @Html.ActionLink("Skip", "Skip", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
+                @Html.ActionLink("Next", "Next", new { MessageID = Model.MessageID, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-info btn-lg" })
+            </p>
+        }
+    </div>
+</div>

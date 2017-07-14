@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Classifer";
+    List<SelectListItem> modes = ViewBag.Modes;
+}
+
+<div class="page-header">
+    <h1>Classification</h1>
+</div>
+<div class="h3"><strong>Done: </strong> @ViewBag.CountDone | <strong>Discarded: </strong> @ViewBag.CountDiscarded</div>
+<br />
+<div class="h4">Select a mode:</div>
+<div class="row">
+    <div class="col-md-1">
+        @Html.ActionLink(modes[0].Text + " [" + (string)ViewBag.CountNew + "]", "Classify", "Classifier", new { mode = modes[0].Value }, new { @class= "media-heading btn btn-default btn-info btn-lg" })
+        @Html.ActionLink(modes[1].Text + " [" + (string)ViewBag.CountSkipped + "]", "Classify", "Classifier", new { mode = modes[1].Value }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
+    </div>    
+</div>

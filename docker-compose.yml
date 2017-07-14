@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  messageclassificationassistance:
+    image: messageclassificationassistance
+    build:
+      context: ./MessageClassificationAssistance
+      dockerfile: Dockerfile

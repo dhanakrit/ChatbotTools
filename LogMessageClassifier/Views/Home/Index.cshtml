@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Welcome";
+    //string pageName = "Log Message Classifier";
+}
+
+<div class="jumbotron">
+    <h1>Welcome to Log Message Classifier</h1>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Log Message Classifier</h2>
+        <p>
+            This page will be accessible until July 12, 2017.
+        </p>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-md-4">
+        @Html.ActionLink("Start Classification " +HttpUtility.HtmlDecode("&raquo;"), "Index", "Classifier", null, new {@class="btn btn-default btn-success" })        
+        
+    </div>
+</div>
