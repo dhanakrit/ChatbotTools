@@ -49,7 +49,9 @@ namespace LogMessageClassifier.Controllers
                                  MessageId = l.Id,
                                  Message = l.Message,
                                  CategoryId = c.Id,
-                                 CategoryName = c.CategoryName
+                                 CategoryName = c.CategoryName,
+                                 SecondCategoryId = cm.SecondCategoryId.GetValueOrDefault(0),
+                                 SecondCategoryName = db.Categories.Single(x => x.Id == cm.SecondCategoryId).CategoryName
                              })
                              .OrderByDescending(m => m.MessageId)
                              .Skip((currentPage - 1) * pageSize)
@@ -86,27 +88,90 @@ namespace LogMessageClassifier.Controllers
             }
         }
         
-        public ActionResult Classify(string MessageID, string CategoryID, string Mode)
+        public ActionResult Classify(string MessageID, string CategoryID, string Mode, bool? isSecond)
         {
-            int mid = Convert.ToInt32(MessageID);
-            int cid = Convert.ToInt32(CategoryID);
             var mode = (ClassificationMode)Enum.Parse(typeof(ClassificationMode), Mode);
 
             using (var db = new ChatbotDatabaseDataContext())
             {
+                if(MessageID != null)
+                {
+                    int mid = Convert.ToInt32(MessageID);
+                    int cid = Convert.ToInt32(CategoryID);
+
+                    var result = this.Classify(db, mid, cid, mode, isSecond.Value);
+
+                    if (result)
+                        return View("Classify", GetNextItem(mode, db, mid));
+
+                }
+
+                return View("Classify", GetNextItem(mode, db, 0));
+            }
+
+            //using (var db = new ChatbotDatabaseDataContext())
+            //{
+            //    // Save or update to the classified
+            //    var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
+            //    var citem = db.Categories.SingleOrDefault(c => c.Id == cid);
+
+            //    if (mitem != null && citem != null)
+            //    {
+            //        // Check if the item exists
+            //        var cl = db.ClassifiedMessages.SingleOrDefault(c => c.MessageId == mid);
+
+            //        if (cl != null)
+            //        {
+            //            // Already exists -- set to the new category                        
+            //            cl.CategoryId = cid;
+            //            cl.DateModified = DateTime.Now;
+            //        }
+            //        else
+            //        {
+            //            // Add a new one
+            //            db.ClassifiedMessages.InsertOnSubmit(new ClassifiedMessage { CategoryId = citem.Id, MessageId = mitem.Id, DateModified = DateTime.Now });
+            //        }
+
+            //        //Update the message status
+            //        mitem.Status = (short)MessageStatus.Done;
+            //        mitem.DateModified = DateTime.Now;
+
+            //        db.SubmitChanges();
+            //    }
+                
+            //    return View("Classify", GetNextItem(mode, db, mid));
+            //}
+        }
+
+        private bool Classify(ChatbotDatabaseDataContext db, int MessageID, int CategoryID, ClassificationMode Mode, bool isSecond = false)
+        {
+            try
+            {
+                //int mid = Convert.ToInt32(MessageID);
+                //int cid = Convert.ToInt32(CategoryID);
+                //var mode = (ClassificationMode)Enum.Parse(typeof(ClassificationMode), Mode);
+                
                 // Save or update to the classified
-                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == mid);
-                var citem = db.Categories.SingleOrDefault(c => c.Id == cid);
+                var mitem = db.LogMessages.SingleOrDefault(l => l.Id == MessageID);
+                var citem = db.Categories.SingleOrDefault(c => c.Id == CategoryID);
 
                 if (mitem != null && citem != null)
                 {
                     // Check if the item exists
-                    var cl = db.ClassifiedMessages.SingleOrDefault(c => c.MessageId == mid);
+                    var cl = db.ClassifiedMessages.SingleOrDefault(c => c.MessageId == MessageID);
 
                     if (cl != null)
                     {
-                        // Already exists -- set to the new category                        
-                        cl.CategoryId = cid;
+                        // Already exists -- set to the new category
+                        if (isSecond)
+                        {
+                            cl.SecondCategoryId = CategoryID;
+                        }
+                        else
+                        {
+                            cl.CategoryId = CategoryID;
+                        }
+
                         cl.DateModified = DateTime.Now;
                     }
                     else
@@ -121,8 +186,12 @@ namespace LogMessageClassifier.Controllers
 
                     db.SubmitChanges();
                 }
-                
-                return View("Classify", GetNextItem(mode, db, mid));
+
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -220,11 +289,35 @@ namespace LogMessageClassifier.Controllers
         // GET: Classifier/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            using (var db = new ChatbotDatabaseDataContext())
+            {
+                // Get the item
+
+                var item = db.ClassifiedMessages.SingleOrDefault(m => m.MessageId == id);
+
+                if (item != null)
+                {
+                    var log = db.LogMessages.Single(m => m.Id == item.MessageId);
+
+                    return View("Classify", new ClassifyViewModel()
+                    {
+                        Categories = db.Categories.ToList(),
+                        IsEditMode = true,
+                        CategoryId = item.CategoryId.GetValueOrDefault(),
+                        MessageId = item.MessageId,
+                        SecondCategoryId = item.SecondCategoryId.GetValueOrDefault(),
+                        RelatedMessages = db.LogMessages.Where(m => m.SessionFileName == log.SessionFileName).OrderBy(m => m.Id).ToList(),
+                        Message = log.Message,
+                        Mode = ClassificationMode.Edit
+                    });
+                }
+
+                return View("Index");
+            }
         }
 
         // POST: Classifier/Edit/5
-        [HttpPost]
+        [HttpPost]        
         public ActionResult Edit(int id, FormCollection collection)
         {
             try

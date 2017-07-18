@@ -13,6 +13,9 @@ namespace LogMessageClassifier.Models.ViewModels
         public ClassificationMode Mode { get; set; }
         public List<Category> Categories { get; set; }
         public List<LogMessage> RelatedMessages { get; set; }
+        public int CategoryId { get; set; }
+        public int SecondCategoryId { get; set; }
+        public bool IsEditMode { get; set; }
     }
 
     public class ClassifyIndexViewModel
@@ -22,7 +25,6 @@ namespace LogMessageClassifier.Models.ViewModels
         public int TotalPages { get; set; }
         public int TotalRecords { get; set; }
         public List<DetailedClassifiedMessage> Messages { get; set; }
-
         public List<SelectListItem> Modes { get; set; }
         public int CountNew { get; set; }
         public int CountDiscarded { get; set; }
@@ -36,5 +38,7 @@ namespace LogMessageClassifier.Models.ViewModels
         public string Message { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int SecondCategoryId { get; set; }
+        public string SecondCategoryName { get; set; }
     }
 }

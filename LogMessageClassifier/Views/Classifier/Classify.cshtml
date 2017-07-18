@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Classify";
+    string BUTTON_CLASS = "media-heading btn btn-default btn-md";
+    string _selectedButtonClass = "";
 }
 
 @using LogMessageClassifier.Models.ViewModels;
@@ -12,9 +14,18 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#accordion").accordion();
+        $("#accordion").accordion(
+            {
+                heightStyle: "content"
+            });
     });
 </script>
+
+<style>
+    .matched{
+        color: firebrick;
+    }
+</style>
 
 <div class="page-header">
     <h1>Classification</h1>
@@ -37,24 +48,46 @@
                             <table>
                                 @foreach (var cat in Model.Categories)
                                 {
-                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
+                                    if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && Model.CategoryId == cat.Id)
+                                    {
+                                        _selectedButtonClass = " btn-info";
+                                    }
+
+                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode, isSecond = false }, new { @class = BUTTON_CLASS + _selectedButtonClass, @style = "margin-right: 5px;" })
+                                    _selectedButtonClass = "";
                                 }
                             </table>
                         </div>
-                        @if (Model.RelatedMessages.Count > 0)
+                        @if (Model.RelatedMessages.Count > 1)
                         {
                             <h3>@Model.RelatedMessages[0].SessionFileName [@Model.RelatedMessages.Count]</h3>
-                            <div>
+                            <div style="color: grey">
                                 <p>
-                                    @foreach(var item in Model.RelatedMessages)
+                                    @foreach (var item in Model.RelatedMessages)
                                     {
-                                        //@item.ChatTimestamp.Value.ToString("dd MMM yyyy hh:mm:ss")  @item.Message.Trim()
+                                        if (item.Id == Model.MessageId)
+                                        {
+                                            @Html.Raw("<span class=\"matched\">");
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("<span>");
+                                        }
+
+                                        @Html.Raw(item.ChatTimestamp.Value.ToString("dd MMM yyyy hh:mm") + HttpUtility.HtmlDecode("&emsp;") + item.Message.Trim() + "<br />")
+                                        @Html.Raw("</span>")                                        
                                     }
                                 </p>
                                 <table>
                                     @foreach (var cat in Model.Categories)
                                     {
-                                        @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-md", @style = "margin-right: 5px;" })
+                                        if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && Model.SecondCategoryId == cat.Id)
+                                        {
+                                            _selectedButtonClass = " btn-info";
+                                        }
+
+                                        @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode, isSecond = true }, new { @class = BUTTON_CLASS + _selectedButtonClass, @style = "margin-right: 5px;" })
+                                        _selectedButtonClass = "";
                                     }
                                 </table>
                             </div>
@@ -63,11 +96,20 @@
                 </div>                
             </div>
             <br />
+            if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit)
+            {
+                <a href="javascript: history.go(-1)" class="media-heading btn btn-default btn-warning btn-lg">Back</a>
+
+                //@Html.ActionLink("Back", "Index", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
+            }
+            else
+            {
             <div>
                 @Html.ActionLink("Discard", "Discard", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-danger btn-lg" })
                 @Html.ActionLink("Skip", "Skip", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-warning btn-lg" })
                 @Html.ActionLink("Next", "Next", new { MessageID = Model.MessageId, Mode = Model.Mode }, new { @class = "media-heading btn btn-default btn-info btn-lg" })
             </div>
+            }
         }
     </div>
 </div>
