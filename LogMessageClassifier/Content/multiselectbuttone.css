@@ -1,0 +1,43 @@
+﻿.ck-button {
+    margin: 4px;
+    background-color: #EFEFEF;
+    border-radius: 2px;
+    border: 1px solid #D0D0D0;
+    overflow: auto;
+    float: left;
+    cursor: pointer
+}
+
+.ck-button label {
+    float: left;
+    width: 4.0em;
+    padding: unset !important;
+    cursor: pointer
+}
+
+    .ck-button label span {
+        text-align: center;
+        padding: 3px 0px;
+        display: block;
+        border-radius: 2px;
+        cursor: pointer
+    }
+
+    .ck-button label input {
+        position: absolute;
+        top: -20px;
+    }
+
+.ck-button input[type=checkbox]:hover + span {
+    background-color: #efE0E0;
+}
+
+.ck-button input[type=checkbox]:checked + span {
+    background-color: #5cbadc;
+    color: #fff;
+}
+
+.ck-button input[type=checkbox]:checked:hover + span {
+    background-color: #5cbadc;
+    color: #fff;
+}

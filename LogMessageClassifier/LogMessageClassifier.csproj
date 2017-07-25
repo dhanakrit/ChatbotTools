@@ -49,6 +49,9 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Devart.Data, Version=5.0.1704.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.Linq, Version=4.7.1283.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.SqlServer.Linq, Version=4.7.1283.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -176,10 +179,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ChatbotDatabase.designer.cs">
+    <Compile Include="ChatlogDataContext.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ChatbotDatabase.dbml</DependentUpon>
+      <DependentUpon>ChatlogDataContext.lqml</DependentUpon>
     </Compile>
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\ClassifierController.cs" />
@@ -201,6 +204,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\checkboxbuttontoggle.css" />
+    <Content Include="Content\multiselectbuttone.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -250,11 +255,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ChatbotDatabase.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>ChatbotDatabase.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -263,6 +263,16 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="ChatlogDataContext.Diagram1.view">
+      <DependentUpon>ChatlogDataContext.lqml</DependentUpon>
+    </Content>
+    <Content Include="ChatlogDataContext.edps">
+      <DependentUpon>ChatlogDataContext.lqml</DependentUpon>
+    </Content>
+    <Content Include="ChatlogDataContext.lqml">
+      <Generator>DevartLinqToSqlGenerator</Generator>
+      <LastGenOutput>ChatlogDataContext.Designer.cs</LastGenOutput>
+    </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -315,11 +325,6 @@
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ChatbotDatabase.dbml.layout">
-      <DependentUpon>ChatbotDatabase.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

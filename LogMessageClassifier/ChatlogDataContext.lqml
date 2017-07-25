@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="test_chatbot" EntityNamespace="ChatLogContext" ContextNamespace="ChatLogContext" Class="ChatLogDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="6718c293-c3da-4dec-a910-b88dc8b23d62" Provider="Devart.Data.SqlServer.Linq.Provider.SqlDataProvider, Devart.Data.SqlServer.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=203.154.175.127;Initial Catalog=test_chatbot;Integrated Security=False;Persist Security Info=True;User ID=TPXsa;Password=@tourprox2017" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Categories" Member="Categories">
+    <Type Name="Category" ed:Guid="3cf2d59f-64cb-4ce8-9608-f6b25c90caae">
+      <Column Name="Id" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="65b6f326-07fd-46a6-8027-c737c18360fe" />
+      <Column Name="CategoryName" Type="System.String" DbType="NVARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" Unicode="true" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="03d926cd-53ef-4853-8fc9-0f58112bcb19" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" DefaultValue="getdate()" ed:ValidateRequired="false" ed:Guid="b9597296-7eeb-48c0-bdbe-2fc3ed0685b9" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClassifiedMessages" Member="ClassifiedMessages">
+    <Type Name="ClassifiedMessage" ed:Guid="9d20c995-7e75-4f3b-b4f5-85d01eab060b">
+      <Column Name="MessageId" Type="System.Int32" DbType="INT NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="06b991d1-d92d-4480-97c9-22b95462ef9b" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="8d170e32-c964-4f87-937b-c5bd75750b91" />
+      <Column Name="SecondCategoryId" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" DefaultValue="0" Precision="10" ed:ValidateRequired="false" ed:Guid="4616bc22-deb1-46fa-84c1-107899dc57ad" />
+      <Column Name="SelectedCategories" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="6c0e439a-b221-409f-b0f7-cd7f14a9ac80" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" DefaultValue="getdate()" ed:ValidateRequired="false" ed:Guid="64372034-352e-449d-8b59-9c583b2743de" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LogMessages" Member="LogMessages">
+    <Type Name="LogMessage" ed:Guid="e7f2d3e0-4000-4aeb-b715-3aac82f67ac8">
+      <Column Name="Id" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="f71ad29d-f74d-4e1a-ad55-cb471e43d696" />
+      <Column Name="Chatter" Type="System.String" DbType="NVARCHAR(200)" CanBeNull="true" UpdateCheck="Never" MaxLength="200" Unicode="true" ed:ValidateMaxLength="200" ed:ValidateRequired="false" ed:Guid="94a5c483-8300-457c-9dd5-0536fee44832" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="fbef26ff-2455-491b-bd76-d880f2651771" />
+      <Column Name="Message" Type="System.String" DbType="NVARCHAR(MAX)" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="c9eb51a5-3165-4746-b6c0-a67da2c7f208" />
+      <Column Name="Status" Type="System.Int16" DbType="SMALLINT" CanBeNull="true" UpdateCheck="Never" DefaultValue="0" Precision="5" ed:ValidateRequired="false" ed:Guid="367a6541-dbc8-4e23-a08f-c99017e6e4b9" />
+      <Column Name="SessionFileName" Type="System.String" DbType="NVARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" Unicode="true" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="46d805f2-a49f-42f2-98a2-b0275840023a" />
+      <Column Name="DateModified" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" DefaultValue="getdate()" ed:ValidateRequired="false" ed:Guid="4062e206-bbad-413e-a2f9-abe7cec0ec3b" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" DefaultValue="getdate()" ed:ValidateRequired="false" ed:Guid="81dbd0ce-6be7-4a40-9471-b71c08df7e9f" />
+    </Type>
+  </Table>
+</Database>

@@ -50,10 +50,10 @@
             {
                 <tr>
                     <td class="modal-body media-middle">
-                        @Html.Label(item.Message)
+                        @("[" + item.MessageId.ToString("N0") + "] " + item.Message)
                     </td>
                     <td class="modal-body">
-                        @Html.Label(item.CategoryName)
+                        @item.SelectedCategoryNames
                         @if(item.SecondCategoryId != 0)
                         {
                             <br/>@("[" + item.SecondCategoryName + "]");
@@ -92,5 +92,4 @@
             document.forms[0].submit();
         }
     </script>
-
 </div>

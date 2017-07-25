@@ -12,31 +12,5 @@ namespace LogMessageClassifier.Controllers
         {            
             return View();
         }
-
-        public ActionResult Welcome()
-        {
-            ViewBag.Message = "Hello";
-
-            using (var db = new ChatbotDatabaseDataContext())
-            {
-                //db.ClassifiedMessages
-            }
-
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

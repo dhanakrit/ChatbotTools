@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatLogContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,7 @@ namespace LogMessageClassifier.Controllers
         // GET: Category
         public ActionResult Index()
         {
-            using (var db = new ChatbotDatabaseDataContext())
+            using (var db = new ChatLogDataContext())
             {
                 // List all the categories
                 var categories = db.Categories.ToList();
@@ -30,14 +31,14 @@ namespace LogMessageClassifier.Controllers
         
         public ActionResult Create(string categoryname)
         {
-            using (var db = new ChatbotDatabaseDataContext())
+            using (var db = new ChatLogDataContext())
             {
                 // Check if the same name exists
                 var exists = db.Categories.Any(c => c.CategoryName == categoryname.Trim());
 
                 if(!exists)
                 {
-                    db.Categories.InsertOnSubmit(new Category() { CategoryName = categoryname, ModifiedDate = DateTime.Now });
+                    db.Categories.InsertOnSubmit(new Category { CategoryName = categoryname, ModifiedDate = DateTime.Now });
                     db.SubmitChanges();
                 }
 
@@ -52,7 +53,7 @@ namespace LogMessageClassifier.Controllers
             try
             {
                 // TODO: Add insert logic here
-                using (var db = new ChatbotDatabaseDataContext())
+                using (var db = new ChatLogDataContext())
                 {
                     // Check if the same name exists
                     var exists = db.Categories.Any(c => c.CategoryName == collection["categoryname"].Trim());
@@ -97,7 +98,7 @@ namespace LogMessageClassifier.Controllers
         // GET: Category/Delete/5
         public ActionResult Delete(int id)
         {
-            using (var db = new ChatbotDatabaseDataContext())
+            using (var db = new ChatLogDataContext())
             {
                 // Find the specific item by ID
                 var item = db.Categories.SingleOrDefault(c => c.Id == id);

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="softsq_chatbot" EntityNamespace="SoftsqChatbotContext" ContextNamespace="SoftsqChatbotContext" Class="SoftsqChatbotDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="8e51ecd1-8887-4acb-9711-54a698e9b754" Provider="Devart.Data.MySql.Linq.Provider.MySqlDataProvider, Devart.Data.MySql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="User Id=root;Host=127.0.0.1;Database=softsq_chatbot;Unicode=True;Persist Security Info=True;Character Set=utf8" Provider="Devart.Data.MySql" />
+  <Table Name="softsq_chatbot.chathistories" Member="Chathistories">
+    <Type Name="Chathistory" ed:Guid="601f163f-a314-42ef-b6ee-2dc3529a278c">
+      <Column Name="ID" Type="System.Int32" AutoSync="OnInsert" DbType="INT(11) NOT NULL AUTO_INCREMENT" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="11" ed:ValidateRequired="true" ed:Guid="4bb8d8c5-be9d-44ec-a51a-e1834aff3c20" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DATETIME NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="02a1306a-327c-4362-8889-eac803c86b05" />
+      <Column Name="Chatter" Type="System.String" DbType="VARCHAR(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="true" ed:Guid="ffa20ce5-dc17-4331-b360-75c654fea567" />
+      <Column Name="Message" Type="System.String" DbType="LONGTEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="981b0a80-a7f9-4b28-b0e5-f6be29a49eb9" />
+      <Column Name="SessionFileName" Type="System.String" DbType="TEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="true" ed:Guid="ae9360ee-65ef-4d6d-9481-b401395e9e06" />
+      <Column Name="IsClient" Type="System.Boolean" DbType="TINYINT(1) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6c999dd2-5ee4-4151-a295-1873a372e548" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="TIMESTAMP NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="CURRENT_TIMESTAMP" ed:ValidateRequired="true" ed:Guid="3285619b-061d-475b-acd2-ff322a238be3" />
+    </Type>
+  </Table>
+  <Table Name="softsq_chatbot.client_messages" Member="ClientMessages">
+    <Type Name="ClientMessage" ed:Guid="43b6c03e-3cc2-4149-8801-edaac784f443">
+      <Column Name="ID" Type="System.Int32" AutoSync="OnInsert" DbType="INT(11) NOT NULL AUTO_INCREMENT" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="11" ed:ValidateRequired="true" ed:Guid="9b1891e8-0511-4c7c-91dd-bb92b2b36c63" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DATETIME NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="700061dd-9eb0-4d59-b1bf-e469e5133ed4" />
+      <Column Name="Chatter" Type="System.String" DbType="VARCHAR(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="true" ed:Guid="5e48cd82-c16c-4f21-b5b2-baf0487f5143" />
+      <Column Name="Message" Type="System.String" DbType="LONGTEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f26f2fbf-fbfb-4466-a774-720c8341a41e" />
+      <Column Name="SessionFileName" Type="System.String" DbType="TEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="true" ed:Guid="fbad8e4e-0877-4046-b501-7e34ab2943df" />
+      <Column Name="IsClient" Type="System.Boolean" DbType="TINYINT(1) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="35b6a62c-3312-466f-8dda-8b54e1dff45a" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="TIMESTAMP NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="CURRENT_TIMESTAMP" ed:ValidateRequired="true" ed:Guid="b1b4644b-2016-46d0-b216-01c9de893bf0" />
+    </Type>
+  </Table>
+  <Table Name="softsq_chatbot.logmessages" Member="Logmessages">
+    <Type Name="Logmessage" ed:Guid="2149168f-13a0-4534-a290-ae74eea3674e">
+      <Column Name="Message" Type="System.String" DbType="LONGTEXT NULL" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="a146462e-3d6b-43da-bfad-bffa9140d645" />
+    </Type>
+  </Table>
+  <Table Name="softsq_chatbot.logmessages_v2" Member="LogmessagesV2s">
+    <Type Name="LogmessagesV2" ed:Guid="1fee3804-9c01-4699-8ae7-0d9262aca0d6">
+      <Column Name="ID" Type="System.Int32" DbType="INT(11) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" DefaultValue="0" Precision="11" ed:ValidateRequired="true" ed:Guid="f5549254-99ef-4bb7-8938-33f033597c4c" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DATETIME NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="ee9ae308-5e6f-4a70-84af-5bde2098552a" />
+      <Column Name="Chatter" Type="System.String" DbType="VARCHAR(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="true" ed:Guid="f17927a8-dd16-42bf-ad48-79d8926c9866" />
+      <Column Name="Message" Type="System.String" DbType="LONGTEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0df7810e-f7e1-433a-8254-fd1a02f446bf" />
+      <Column Name="SessionFileName" Type="System.String" DbType="TEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="true" ed:Guid="301cacd1-49a7-4c11-83c7-4ff74fac56ba" />
+      <Column Name="IsClient" Type="System.Boolean" DbType="TINYINT(1) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="334c079e-6693-4ca6-9338-22de9e1dcd34" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="TIMESTAMP NOT NULL" CanBeNull="false" UpdateCheck="Never" DefaultValue="CURRENT_TIMESTAMP" ed:ValidateRequired="true" ed:Guid="d7b6ab40-5e17-4914-865e-3a63cb44a390" />
+    </Type>
+  </Table>
+  <Table Name="softsq_chatbot.logmessages_v3" Member="LogmessagesV3s">
+    <Type Name="LogmessagesV3" ed:Guid="eb0f8200-087e-4878-80b1-fd087c08df20">
+      <Column Name="Id" Type="System.Int32" AutoSync="OnInsert" DbType="INT(11) NOT NULL AUTO_INCREMENT" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" DefaultValue="0" Precision="11" ed:ValidateRequired="true" ed:Guid="35b0aa92-607f-4309-ac94-268e7c4e60b1" />
+      <Column Name="ChatTimestamp" Type="System.DateTime" DbType="DATETIME NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="c63dbbbd-3e58-47e9-9894-dfa0f2efb584" />
+      <Column Name="Chatter" Type="System.String" DbType="VARCHAR(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="true" ed:Guid="ea086dcf-48bf-4979-9685-3e91715cb681" />
+      <Column Name="Message" Type="System.String" DbType="TEXT NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="80dcdc81-10f7-4160-b515-1ce0dc181d07" />
+      <Column Name="IsCLient" Type="System.Boolean" DbType="TINYINT(1) NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="a128a96b-7865-4012-bad4-04d68013024b" />
+      <Column Name="SessionFileName" Type="System.String" DbType="TEXT NOT NULL" CanBeNull="false" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="true" ed:Guid="110b545b-d21c-4969-b039-092f581bb1b5" />
+    </Type>
+  </Table>
+</Database>

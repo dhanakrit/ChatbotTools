@@ -1,16 +1,20 @@
-﻿@{
+﻿@using LogMessageClassifier.Models.ViewModels;
+@model ClassifyViewModel
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Classify";
     string BUTTON_CLASS = "media-heading btn btn-default btn-md";
     string _selectedButtonClass = "";
+    string[] _selectedCats = Model.SelectedCategories.Split(new char[]{'|'});
+    string TOGGLE_BUTTON = "toggle-button";
 }
-
-@using LogMessageClassifier.Models.ViewModels;
-@model ClassifyViewModel
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <link href="~/Content/themes/base/all.css" rel="stylesheet" />
 <link href="~/Content/themes/base/accordion.css" rel="stylesheet" />
+<link href="~/Content/checkboxbuttontoggle.css" rel="stylesheet" />
+
 
 <script type="text/javascript">
     $(function () {
@@ -19,11 +23,26 @@
                 heightStyle: "content"
             });
     });
+
+    //$("input:checkbox[name=type]:checked").each(function () {
+    //    selectcats.push($(this).val());
+    //});
+
+    $("[name='selectedCategories']").on("click", function () {
+        var checked = false;
+        alert($(this));
+    });
 </script>
 
 <style>
     .matched{
         color: firebrick;
+    }
+
+    .toggle-button{
+        
+        margin: 0px 5px 5px 0px;
+        max-width: 500px;
     }
 </style>
 
@@ -45,8 +64,8 @@
                         <h3>Main Message</h3>
                         <div>
                             <text class="h3">[@Model.MessageId] @(Model.Message)</text><br /><br />
-                            <table>
-                                @foreach (var cat in Model.Categories)
+                            
+                                @*@foreach (var cat in Model.Categories)
                                 {
                                     if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && Model.CategoryId == cat.Id)
                                     {
@@ -55,9 +74,44 @@
 
                                     @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode, isSecond = false }, new { @class = BUTTON_CLASS + _selectedButtonClass, @style = "margin-right: 5px;" })
                                     _selectedButtonClass = "";
+                                }*@
+                            
+                            <div>
+                                @using (Html.BeginForm("Classify", "Classifier", FormMethod.Post))
+                                {
+                                    foreach (var item in Model.Selectors)
+                                    {
+                                        item.IsSelected = _selectedCats.Contains(item.Id.ToString("N0"));
+
+                                        if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && item.IsSelected)
+                                        {
+                                            _selectedButtonClass = " btn-info";
+                                        }
+                                               <label class="tgl" style="font-size:16px">
+                                                   <input type="checkbox" name="selectedCategories"
+                                                          checked="@item.IsSelected" value="@item.Id" />
+                                                <span>@item.Name</span>
+                                            </label>
+
+                                                @*@Html.HiddenFor(x => item.Id)
+                                                    @Html.CheckBoxFor(x => item.IsSelected)
+                                                    @Html.DisplayFor(x => item.Name)
+                                                    @Html.HiddenFor(x => item.Name)*@
+
+                                    _selectedButtonClass = "";
                                 }
-                            </table>
+
+                                    <br />
+                                    <input type="hidden" name="MessageID" value="@Model.MessageId" />
+                                    <input type="hidden" name="Mode" value="@Model.Mode" />
+                                    <input type="hidden" name="IsSecond" value="False" />
+                                    <input type="submit" class="btn btn-sm btn-success" value="Save" />
+                                }
+                            </div>
                         </div>
+                        
+                            
+                        
                         @if (Model.RelatedMessages.Count > 1)
                         {
                             <h3>@Model.RelatedMessages[0].SessionFileName [@Model.RelatedMessages.Count]</h3>
@@ -79,16 +133,16 @@
                                     }
                                 </p>
                                 <table>
-                                    @foreach (var cat in Model.Categories)
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && Model.SecondCategoryId == cat.Id)
                                     {
-                                        if (Model.Mode == LogMessageClassifier.Models.ClassificationMode.Edit && Model.SecondCategoryId == cat.Id)
-                                        {
-                                            _selectedButtonClass = " btn-info";
-                                        }
-
-                                        @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode, isSecond = true }, new { @class = BUTTON_CLASS + _selectedButtonClass, @style = "margin-right: 5px;" })
-                                        _selectedButtonClass = "";
+                                        _selectedButtonClass = " btn-info";
                                     }
+
+                                    @Html.ActionLink(cat.CategoryName, "Classify", new { MessageID = Model.MessageId, CategoryID = cat.Id, Mode = Model.Mode, isSecond = true }, new { @class = BUTTON_CLASS + _selectedButtonClass, @style = "margin-right: 5px;" })
+                                    _selectedButtonClass = "";
+                                }
                                 </table>
                             </div>
                         }
