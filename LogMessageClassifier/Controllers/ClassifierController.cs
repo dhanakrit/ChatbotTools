@@ -146,7 +146,7 @@ namespace LogMessageClassifier.Controllers
                     var result = this.Classify(db, mid, collection["selectedCategories"], mode, false);
 
                     if (result)
-                        return View("Classify", this.GetClassifiedMessages(1, 10));
+                        return View("Index", this.GetClassifiedMessages(1, 10));
                 }
 
                 return View("Index", this.GetClassifiedMessages(1, 10));
@@ -369,7 +369,7 @@ namespace LogMessageClassifier.Controllers
                     });
                 }
 
-                return View("Index");
+                return View("Classify");
             }
         }
 
